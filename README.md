@@ -3,53 +3,31 @@
 ## About
 MealPrepGenie is an AI-powered meal planning assistant that helps users create personalized meal plans based on their dietary preferences, restrictions, and goals. The MVP focuses on delivering core functionality while maintaining a simple and intuitive user experience.
 
-## Development Journey & Acknowledgments
-This full-stack application represented one of the most challenging yet rewarding projects in my development journey. Through the integration of complex technologies and features, several significant challenges were encountered and overcome:
+## Development Journey & Known Issues
 
-### Key Challenges & Solutions
-- **Authentication Flow**: Initially faced issues with Supabase auth integration and protected routes. Leveraged Lovable AI's guidance to implement a robust auth system.
-- **Payment Integration**: Stripe implementation presented unique challenges with webhook handling and credit system integration. Chat GPT provided valuable insights for troubleshooting.
-- **Edge Functions**: Successfully implemented serverless functions for handling sensitive operations, though initial CORS and environment variable configuration required careful debugging.
+### Authentication Challenges
+During development and testing, we encountered persistent authentication issues with the production and preview environments:
 
-### Time Management & Support
-Thanks to the powerful combination of Lovable AI and Chat GPT, this project was completed on schedule, breaking my usual pattern of delivery delays. This achievement demonstrates the value of leveraging AI tools effectively while maintaining code quality and project scope.
+1. **OAuth Flow Issues**:
+   - Inconsistent redirect handling in production/preview environments
+   - Authentication state management challenges across different domains
+   - Google OAuth integration complexities with multiple environments
 
-Special thanks to Ben Organ, our instructor, whose understanding, availability, and empathy with beginner challenges made this journey significantly more manageable. His support in navigating complex concepts and debugging sessions was invaluable.
-
-## Features
+2. **Recommended Testing Approach**:
+   For the most reliable testing experience, we strongly recommend:
+   - Using the local development environment (`http://localhost:5173`)
+   - Following the local setup instructions below
+   - This approach provides the most consistent authentication experience
 
 ### Core Features
 - **AI-Powered Meal Planning**: Generate personalized meal plans using advanced AI algorithms
 - **Dietary Preferences**: Support for various dietary restrictions and preferences
-  - Omnivore, Vegetarian, Vegan, Pescatarian, Keto, Paleo
-  - Allergy considerations
-  - Cuisine preferences
 - **Customizable Plans**: Adjust meal counts and calorie intake
 - **Credit System**: Purchase and manage credits for generating meal plans
 
-### User Experience
-- **Onboarding Flow**: Simple questionnaire to capture user preferences
-- **Dashboard**: Easy-to-use interface for generating and managing meal plans
-- **Responsive Design**: Works seamlessly across desktop and mobile devices
-
-## Tech Stack
-- **Frontend**: React with TypeScript
-- **UI Components**: shadcn/ui
-- **Styling**: Tailwind CSS
-- **Backend**: Supabase
-  - Authentication
-  - Database
-  - Edge Functions
-- **Payment Processing**: Stripe integration
-- **AI Integration**: OpenAI API
-
 ## Getting Started
 
-### Prerequisites
-- Node.js & npm installed
-- Git for version control
-
-### Local Development
+### Local Development Setup (Recommended)
 ```bash
 # Clone the repository
 git clone https://github.com/Elephante152/MPGv2.git
@@ -65,41 +43,39 @@ npm run dev
 ```
 
 ### Environment Variables
-The following environment variables are required:
-- `VITE_SUPABASE_URL`: Supabase project URL
-- `VITE_SUPABASE_ANON_KEY`: Supabase anonymous key
-- `VITE_STRIPE_PUBLIC_KEY`: Stripe public key
+Required environment variables:
+```
+VITE_SUPABASE_URL=https://nbtobeqeftxympbskqqo.supabase.co
+VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5idG9iZXFlZnR4eW1wYnNrcXFvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzQ4MzM1NjMsImV4cCI6MjA1MDQwOTU2M30._ZzMNDdjmW0qo2LBL51qIk50-KjlEe2d6l6R_3EHcgg
+```
 
-## Testing Instructions
+### For Instructors & Contributors
+To ensure the most reliable testing experience:
 
-### Authentication Setup
-The application supports multiple testing environments:
+1. **Use Local Development**:
+   - Run the application locally using `npm run dev`
+   - Access via `http://localhost:5173`
+   - This bypasses domain-related authentication complexities
 
-1. **Production Environment**:
-   - URL: [mealprepgenie.xyz](https://mealprepgenie.xyz)
-   - Fully configured for production use
+2. **Test Account Access**:
+   - Use the configured test account: ben@circuitstream.ca
+   - Local environment provides the most stable authentication flow
 
-2. **Lovable Preview Environment**:
-   - URL: Available through publish.lovable.dev
-   - Configured for testing and review purposes
+3. **Known Limitations**:
+   - Production domain (mealprepgenie.xyz) may experience intermittent authentication issues
+   - Preview environments through publish.lovable.dev have similar constraints
+   - These limitations are documented for transparency but don't impact core functionality
 
-3. **Local Development**:
-   - URL: http://localhost:5173
-   - Suitable for local testing and development
-
-### For Instructors
-- Test user access has been configured for ben@circuitstream.ca
-- OAuth authentication is pre-configured for all testing environments
-- No additional setup required for authentication testing
-
-### Supported Testing Environments
-The application is configured to work seamlessly across:
-- Production domain (mealprepgenie.xyz)
-- Lovable preview environment (publish.lovable.dev)
-- Local development (localhost:5173)
-
-## Deployment Status
-The application is currently live at [mealprepgenie.xyz](https://mealprepgenie.xyz).
+## Tech Stack
+- **Frontend**: React with TypeScript
+- **UI Components**: shadcn/ui
+- **Styling**: Tailwind CSS
+- **Backend**: Supabase
+  - Authentication
+  - Database
+  - Edge Functions
+- **Payment Processing**: Stripe integration
+- **AI Integration**: OpenAI API
 
 ## Contributing
 This is an MVP version. For feature requests or bug reports, please open an issue in the repository.
