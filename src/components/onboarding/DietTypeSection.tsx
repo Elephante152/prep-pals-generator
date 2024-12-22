@@ -21,7 +21,7 @@ export const DietTypeSection = ({ dietType, setDietType, dietTypes }: DietTypeSe
             <RadioGroupItem value={diet} id={diet} className="peer sr-only" />
             <Label
               htmlFor={diet}
-              className="flex items-center justify-center px-4 py-2 bg-white border border-gray-200 rounded-md cursor-pointer transition-colors peer-checked:bg-emerald-100 peer-checked:border-emerald-500 hover:bg-gray-50"
+              className="flex items-center justify-center px-4 py-2 bg-white border border-gray-200 rounded-md cursor-pointer transition-colors peer-data-[state=checked]:bg-emerald-100 peer-data-[state=checked]:border-emerald-500 hover:bg-gray-50"
             >
               {diet}
             </Label>
