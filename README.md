@@ -3,6 +3,19 @@
 ## About
 MealPrepGenie is an AI-powered meal planning assistant that helps users create personalized meal plans based on their dietary preferences, restrictions, and goals. The MVP focuses on delivering core functionality while maintaining a simple and intuitive user experience.
 
+## Development Journey & Acknowledgments
+This full-stack application represented one of the most challenging yet rewarding projects in my development journey. Through the integration of complex technologies and features, several significant challenges were encountered and overcome:
+
+### Key Challenges & Solutions
+- **Authentication Flow**: Initially faced issues with Supabase auth integration and protected routes. Leveraged Lovable AI's guidance to implement a robust auth system.
+- **Payment Integration**: Stripe implementation presented unique challenges with webhook handling and credit system integration. Chat GPT provided valuable insights for troubleshooting.
+- **Edge Functions**: Successfully implemented serverless functions for handling sensitive operations, though initial CORS and environment variable configuration required careful debugging.
+
+### Time Management & Support
+Thanks to the powerful combination of Lovable AI and Chat GPT, this project was completed on schedule, breaking my usual pattern of delivery delays. This achievement demonstrates the value of leveraging AI tools effectively while maintaining code quality and project scope.
+
+Special thanks to Ben Organ, our instructor, whose understanding, availability, and empathy with beginner challenges made this journey significantly more manageable. His support in navigating complex concepts and debugging sessions was invaluable.
+
 ## Features
 
 ### Core Features
@@ -56,6 +69,9 @@ The following environment variables are required:
 - `VITE_SUPABASE_URL`: Supabase project URL
 - `VITE_SUPABASE_ANON_KEY`: Supabase anonymous key
 - `VITE_STRIPE_PUBLIC_KEY`: Stripe public key
+
+## Deployment Status
+The application will be available at [mealprepgenie.xyz](https://mealprepgenie.xyz) once DNS propagation is complete and HTTPS certification is processed through GitHub Pages. This process typically takes 24-48 hours from initial setup.
 
 ## Contributing
 This is an MVP version. For feature requests or bug reports, please open an issue in the repository.
