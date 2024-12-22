@@ -33,8 +33,58 @@ Due to the ongoing deployment configuration, we strongly recommend:
    VITE_STRIPE_PUBLIC_KEY=your_stripe_public_key
    ```
 
-## About
-MealPrepGenie is an AI-powered meal planning assistant that helps users create personalized meal plans based on their dietary preferences, restrictions, and goals. The MVP focuses on delivering core functionality while maintaining a simple and intuitive user experience.
+## Technical Implementation Overview
+
+### Architecture & Framework Usage
+- **Frontend**: React with TypeScript
+- **UI Components**: shadcn/ui
+- **Styling**: Tailwind CSS
+- **State Management**: React Query & Context API
+- **Backend**: Supabase
+  - Authentication
+  - Database
+  - Edge Functions
+  - Row Level Security (RLS)
+
+### Core Integrations
+
+#### 1. Authentication & Authorization
+- **OAuth Integration**: Google Sign-in
+- **Session Management**: Supabase Auth
+- **Role-Based Access**: RLS policies for:
+  - User credits management
+  - Meal plan access
+  - Credit package viewing
+
+#### 2. AI Integration (OpenAI)
+- Model: gpt-4o-mini
+- Implementation: Supabase Edge Functions
+- Features:
+  - Meal plan generation
+  - Dietary recommendations
+  - Recipe customization
+
+#### 3. Payment Processing (Stripe)
+- **Credit System**:
+  - Secure payment processing
+  - Webhook integration
+  - Credit balance management
+- **Features**:
+  - Custom amount support
+  - Transaction history
+  - Automatic credit updates
+
+### Testing & Debugging
+- Console logging for critical operations
+- Error boundary implementation
+- Comprehensive error handling
+- Toast notifications for user feedback
+
+### Security Measures
+- Environment variable protection
+- API key management through Supabase
+- Secure webhook handling
+- RLS policy enforcement
 
 ## Features
 
@@ -51,17 +101,6 @@ MealPrepGenie is an AI-powered meal planning assistant that helps users create p
 - **Onboarding Flow**: Simple questionnaire to capture user preferences
 - **Dashboard**: Easy-to-use interface for generating and managing meal plans
 - **Responsive Design**: Works seamlessly across desktop and mobile devices
-
-## Tech Stack
-- **Frontend**: React with TypeScript
-- **UI Components**: shadcn/ui
-- **Styling**: Tailwind CSS
-- **Backend**: Supabase
-  - Authentication
-  - Database
-  - Edge Functions
-- **Payment Processing**: Stripe integration
-- **AI Integration**: OpenAI API
 
 ## Known Issues & Troubleshooting
 1. **Production Environment (mealprepgenie.xyz)**
