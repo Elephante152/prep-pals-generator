@@ -14,11 +14,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { AnimatedGradientText } from './AnimatedGradientText';
+import { useNavigate } from 'react-router-dom';
 
 export const SignUpFlow = () => {
   const [email, setEmail] = useState('');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,6 +29,7 @@ export const SignUpFlow = () => {
       setIsDialogOpen(false);
       setIsSubmitted(false);
       setEmail('');
+      navigate('/onboarding'); // Redirect to onboarding after signup
     }, 2000);
   };
 
