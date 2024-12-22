@@ -3,7 +3,6 @@ import { AnimatedGradientText } from '@/components/AnimatedGradientText';
 import { SignUpFlow } from '@/components/SignUpFlow';
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
-import { useState } from 'react';
 
 interface HeaderProps {
   onLogin: () => Promise<void>;
@@ -11,15 +10,17 @@ interface HeaderProps {
 
 export const Header = ({ onLogin }: HeaderProps) => {
   const { toast } = useToast();
-  const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async () => {
     try {
-      setIsLoading(true);
+      // Get the current domain
+      const redirectUrl = `${window.location.origin}/auth/callback`;
+      console.log('Login Redirect URL:', redirectUrl); // Debug log
+
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
+          redirectTo: redirectUrl,
           queryParams: {
             access_type: 'offline',
             prompt: 'consent',
@@ -28,22 +29,18 @@ export const Header = ({ onLogin }: HeaderProps) => {
       });
 
       if (error) {
-        console.error('Login Error:', error);
         toast({
           title: "Login Error",
           description: error.message,
           variant: "destructive",
         });
       }
-    } catch (error: any) {
-      console.error('Unexpected Login Error:', error);
+    } catch (error) {
       toast({
         title: "Login Error",
         description: "An unexpected error occurred. Please try again.",
         variant: "destructive",
       });
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -59,9 +56,8 @@ export const Header = ({ onLogin }: HeaderProps) => {
               variant="ghost" 
               className="text-gray-600 hover:text-gray-900"
               onClick={handleLogin}
-              disabled={isLoading}
             >
-              {isLoading ? 'Signing in...' : 'Login'}
+              Login
             </Button>
             <SignUpFlow />
           </div>
