@@ -9,13 +9,98 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      credit_packages: {
+        Row: {
+          base_price: number
+          created_at: string
+          credits_per_package: number
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          base_price: number
+          created_at?: string
+          credits_per_package: number
+          id?: string
+          updated_at?: string
+        }
+        Update: {
+          base_price?: number
+          created_at?: string
+          credits_per_package?: number
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      meal_plans: {
+        Row: {
+          created_at: string
+          credits_used: number
+          cuisine_preferences: string[] | null
+          dietary_restrictions: string[] | null
+          id: string
+          meal_count: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          credits_used: number
+          cuisine_preferences?: string[] | null
+          dietary_restrictions?: string[] | null
+          id?: string
+          meal_count: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          credits_used?: number
+          cuisine_preferences?: string[] | null
+          dietary_restrictions?: string[] | null
+          id?: string
+          meal_count?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_credits: {
+        Row: {
+          balance: number
+          created_at: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          balance?: number
+          created_at?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          balance?: number
+          created_at?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      update_user_credits: {
+        Args: {
+          p_user_id: string
+          p_amount: number
+          p_type: string
+          p_description?: string
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
