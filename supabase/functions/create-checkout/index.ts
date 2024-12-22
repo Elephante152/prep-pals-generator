@@ -57,6 +57,10 @@ serve(async (req) => {
       mode: 'payment', // One-time payment
       success_url: `${req.headers.get('origin')}/dashboard?success=true`,
       cancel_url: `${req.headers.get('origin')}/dashboard?success=false`,
+      metadata: {
+        user_id: user.id, // Store user_id in metadata for webhook processing
+        credits: 10 // Store number of credits being purchased
+      }
     })
 
     console.log('Payment session created:', session.id)
