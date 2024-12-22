@@ -3,12 +3,19 @@
 import { useState, useCallback, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import confetti from 'canvas-confetti'
+import { Link } from 'react-router-dom'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Slider } from "@/components/ui/slider"
 import { useToast } from "@/hooks/use-toast"
+import { EmojiBackground } from '@/components/dashboard/EmojiBackground'
+import { GenerateButton } from '@/components/dashboard/GenerateButton'
+import { DEFAULT_USER_PREFERENCES } from '@/types/dashboard'
+import type { MealPlan } from '@/types/dashboard'
+import { supabase } from "@/integrations/supabase/client"
+import { Menu, HelpCircle, Settings, CreditCard, X, Minimize2, Maximize2, Save, RefreshCw, Utensils, AlertTriangle, Globe, Activity, BarChart, Coffee } from 'lucide-react'
 import {
   Sheet,
   SheetContent,
@@ -28,71 +35,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { supabase } from "@/integrations/supabase/client"
-import { useNavigate } from 'react-router-dom'
-import { Menu, HelpCircle, Settings, CreditCard, Wand2, X, Minimize2, Maximize2, Save, RefreshCw, Utensils, AlertTriangle, Globe, Activity, BarChart, Coffee } from 'lucide-react'
 import { AnimatedGradientText } from '@/components/AnimatedGradientText'
-
-interface UserPreferences {
-  dietType: string
-  allergies: string
-  favoriteCuisines: string[]
-  activityLevel: string
-  calorieIntake: number
-  mealsPerDay: number
-  cookingTools: string[]
-}
-
-interface MealPlan {
-  id: number
-  title: string
-  plan: string
-  isMinimized: boolean
-}
-
-const EmojiBackground = () => {
-  return (
-    <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
-      {[...Array(20)].map((_, i) => (
-        <motion.div
-          key={i}
-          className="absolute text-4xl"
-          initial={{
-            top: "-20%",
-            left: `${Math.random() * 100}%`,
-            rotate: Math.random() * 360,
-          }}
-          animate={{
-            top: "120%",
-            rotate: Math.random() * 360 + 360,
-          }}
-          transition={{
-            duration: Math.random() * 20 + 10,
-            repeat: Infinity,
-            ease: "linear",
-          }}
-        >
-          {['🥗', '🍽️', '🥘', '🍳', '🥑', '🍆', '🥕'][Math.floor(Math.random() * 7)]}
-        </motion.div>
-      ))}
-    </div>
-  )
-}
-
-const GenerateButton = ({ onClick, isLoading }: { onClick: () => void, isLoading: boolean }) => {
-  return (
-    <motion.button
-      onClick={onClick}
-      className="p-4 rounded-full shadow-lg bg-white"
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
-      animate={isLoading ? { rotate: 360 } : {}}
-      transition={isLoading ? { duration: 2, repeat: Infinity, ease: "linear" } : { duration: 0.2 }}
-    >
-      <Wand2 className={`w-6 h-6 text-emerald-500 ${isLoading ? 'animate-pulse' : ''}`} />
-    </motion.button>
-  )
-}
 
 const generateMealPlanTitle = (requirements: string) => {
   const keywords = requirements.toLowerCase().split(' ')
@@ -111,7 +54,6 @@ const triggerConfetti = () => {
 }
 
 export default function Dashboard() {
-  const navigate = useNavigate()
   const { toast } = useToast()
   const [mealPlanText, setMealPlanText] = useState('')
   const [numMeals, setNumMeals] = useState(3)
@@ -128,7 +70,6 @@ export default function Dashboard() {
     const fetchUserCredits = async () => {
       const { data: { session } } = await supabase.auth.getSession()
       if (!session) {
-        navigate('/login')
         return
       }
 
@@ -166,7 +107,7 @@ export default function Dashboard() {
 
     fetchUserCredits()
     fetchCreditPackage()
-  }, [navigate, toast])
+  }, [toast])
 
   const handleGenerate = useCallback(async () => {
     if (credits <= 0) {
@@ -182,7 +123,6 @@ export default function Dashboard() {
     const { data: { session } } = await supabase.auth.getSession()
     
     if (!session) {
-      navigate('/login')
       return
     }
 
@@ -231,7 +171,7 @@ export default function Dashboard() {
     } finally {
       setIsLoading(false)
     }
-  }, [mealPlanText, credits, numMeals, navigate, toast])
+  }, [mealPlanText, credits, numMeals, toast])
 
   const toggleMinimize = (id: number) => {
     setGeneratedPlans(prev =>
@@ -269,15 +209,15 @@ export default function Dashboard() {
   }
 
   const handlePurchaseClick = useCallback(() => {
-    navigate('/credits')
-  }, [navigate])
+    // Implement purchase functionality
+  }, [])
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col relative overflow-hidden">
       <EmojiBackground />
       <header className="bg-white bg-opacity-80 backdrop-blur-md shadow-sm relative z-20">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <Link href="/">
+          <Link to="/">
             <AnimatedGradientText text="MealPrepGenie" className="text-2xl font-bold" />
           </Link>
           <button 
@@ -300,22 +240,22 @@ export default function Dashboard() {
           <nav className="mt-8">
             <ul className="space-y-4">
               <li>
-                <Link href="/dashboard" className="flex items-center text-lg text-gray-600 hover:text-gray-900">
+                <Link to="/dashboard" className="flex items-center text-lg text-gray-600 hover:text-gray-900">
                   Dashboard
                 </Link>
               </li>
               <li>
-                <Link href="/meal-plans" className="flex items-center text-lg text-gray-600 hover:text-gray-900">
+                <Link to="/meal-plans" className="flex items-center text-lg text-gray-600 hover:text-gray-900">
                   Meal Plans
                 </Link>
               </li>
               <li>
-                <Link href="/profile" className="flex items-center text-lg text-gray-600 hover:text-gray-900">
+                <Link to="/profile" className="flex items-center text-lg text-gray-600 hover:text-gray-900">
                   Profile
                 </Link>
               </li>
               <li>
-                <Link href="/settings" className="flex items-center text-lg text-gray-600 hover:text-gray-900">
+                <Link to="/settings" className="flex items-center text-lg text-gray-600 hover:text-gray-900">
                   Settings
                 </Link>
               </li>
@@ -355,28 +295,28 @@ export default function Dashboard() {
                             <Utensils className="w-4 h-4 mr-2" />
                             Diet Type
                           </h4>
-                          <p className="text-sm text-gray-600 bg-gray-100 p-2 rounded">{userPreferences.dietType}</p>
+                          <p className="text-sm text-gray-600 bg-gray-100 p-2 rounded">{DEFAULT_USER_PREFERENCES.dietType}</p>
                         </div>
                         <div className="space-y-1">
                           <h4 className="font-medium text-sm text-gray-700 flex items-center">
                             <AlertTriangle className="w-4 h-4 mr-2" />
                             Allergies
                           </h4>
-                          <p className="text-sm text-gray-600 bg-gray-100 p-2 rounded">{userPreferences.allergies}</p>
+                          <p className="text-sm text-gray-600 bg-gray-100 p-2 rounded">{DEFAULT_USER_PREFERENCES.allergies}</p>
                         </div>
                         <div className="space-y-1">
                           <h4 className="font-medium text-sm text-gray-700 flex items-center">
                             <Globe className="w-4 h-4 mr-2" />
                             Favorite Cuisines
                           </h4>
-                          <p className="text-sm text-gray-600 bg-gray-100 p-2 rounded">{userPreferences.favoriteCuisines.join(', ')}</p>
+                          <p className="text-sm text-gray-600 bg-gray-100 p-2 rounded">{DEFAULT_USER_PREFERENCES.favoriteCuisines.join(', ')}</p>
                         </div>
                         <div className="space-y-1">
                           <h4 className="font-medium text-sm text-gray-700 flex items-center">
                             <Activity className="w-4 h-4 mr-2" />
                             Activity Level
                           </h4>
-                          <p className="text-sm text-gray-600 bg-gray-100 p-2 rounded">{userPreferences.activityLevel}</p>
+                          <p className="text-sm text-gray-600 bg-gray-100 p-2 rounded">{DEFAULT_USER_PREFERENCES.activityLevel}</p>
                         </div>
                         <div className="space-y-1">
                           <h4 className="font-medium text-sm text-gray-700 flex items-center">
@@ -384,9 +324,9 @@ export default function Dashboard() {
                             Daily Stats
                           </h4>
                           <p className="text-sm text-gray-600 bg-gray-100 p-2 rounded">
-                            {userPreferences.calorieIntake} calories
+                            {DEFAULT_USER_PREFERENCES.calorieIntake} calories
                             <br />
-                            {userPreferences.mealsPerDay} meals per day
+                            {DEFAULT_USER_PREFERENCES.mealsPerDay} meals per day
                           </p>
                         </div>
                         <div className="space-y-1">
@@ -394,7 +334,7 @@ export default function Dashboard() {
                             <Coffee className="w-4 h-4 mr-2" />
                             Cooking Tools
                           </h4>
-                          <p className="text-sm text-gray-600 bg-gray-100 p-2 rounded">{userPreferences.cookingTools.join(', ')}</p>
+                          <p className="text-sm text-gray-600 bg-gray-100 p-2 rounded">{DEFAULT_USER_PREFERENCES.cookingTools.join(', ')}</p>
                         </div>
                       </div>
                     </div>
@@ -547,14 +487,10 @@ export default function Dashboard() {
       <footer className="bg-white bg-opacity-80 backdrop-blur-md shadow-sm mt-8 relative z-20">
         <div className="container mx-auto px-4 py-4 text-center text-gray-600">
           <p>Available Credits: {credits}</p>
-          <Button 
-            onClick={handlePurchaseClick}
-            variant="ghost"
-            className="text-emerald-600 hover:text-emerald-700 font-medium"
-          >
+          <Link to="/credits" className="text-emerald-600 hover:text-emerald-700 font-medium">
             Get {creditsPerPackage} generations for ${basePrice}
-            <CreditCard className="ml-2 h-4 w-4" />
-          </Button>
+            <CreditCard className="inline w-4 h-4 ml-1" />
+          </Link>
         </div>
       </footer>
     </div>
