@@ -22,5 +22,5 @@ export default defineConfig(({ mode }) => ({
     sourcemap: true,
     outDir: 'dist'
   },
-  base: '/MPGv2/'
+  base: process.env.NODE_ENV === 'production' ? '/' : '/MPGv2/'
 }));

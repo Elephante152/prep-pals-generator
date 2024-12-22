@@ -8,15 +8,11 @@
     <meta name="author" content="Lovable" />
     <meta property="og:image" content="/og-image.png" />
     <script>
-      // Handle base URL for GitHub Pages
+      // Handle base URL for production and development
       (function() {
-        const { protocol, hostname, pathname } = window.location;
+        const { protocol, hostname } = window.location;
         const baseTag = document.createElement('base');
-        if (hostname === 'mealprepgenie.xyz') {
-          baseTag.href = `${protocol}//${hostname}/`;
-        } else {
-          baseTag.href = `${protocol}//${hostname}${pathname.replace(/\/[^/]*$/, '/')}`;
-        }
+        baseTag.href = `${protocol}//${hostname}/`;
         document.head.prepend(baseTag);
       })();
     </script>

@@ -17,15 +17,13 @@ const queryClient = new QueryClient({
   },
 });
 
-const basename = window.location.hostname === 'mealprepgenie.xyz' ? '/' : '/MPGv2';
-
 const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <BrowserRouter basename={basename}>
+        <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/dashboard" element={<Dashboard />} />
