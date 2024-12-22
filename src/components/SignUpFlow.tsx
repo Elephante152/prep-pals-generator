@@ -1,12 +1,11 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, Check } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -37,6 +36,7 @@ export const SignUpFlow = () => {
       });
 
       if (error) {
+        console.error('Google Sign In Error:', error);
         toast({
           title: "Authentication Error",
           description: error.message,
@@ -44,6 +44,7 @@ export const SignUpFlow = () => {
         });
       }
     } catch (error) {
+      console.error('Unexpected Error:', error);
       toast({
         title: "Authentication Error",
         description: "An unexpected error occurred. Please try again.",
