@@ -1,18 +1,12 @@
 import { useState, useEffect } from 'react'
 import { useToast } from "@/hooks/use-toast"
 import { supabase } from "@/integrations/supabase/client"
-import { CreditCard, Info } from 'lucide-react'
-import { Button } from "@/components/ui/button"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
+import { CreditBalance } from './CreditBalance'
+import { StandardPurchaseButton } from './StandardPurchaseButton'
+import { CustomAmountInput } from './CustomAmountInput'
 
 export const CreditInfo = () => {
   const { toast } = useToast()
-  const [credits, setCredits] = useState(0)
   const [basePrice, setBasePrice] = useState(2.99)
   const [customAmount, setCustomAmount] = useState(basePrice)
   const [creditsPerPackage, setCreditsPerPackage] = useState(10)
@@ -20,30 +14,6 @@ export const CreditInfo = () => {
   const [showCustomAmount, setShowCustomAmount] = useState(false)
 
   useEffect(() => {
-    const fetchUserCredits = async () => {
-      const { data: { session } } = await supabase.auth.getSession()
-      if (!session) return
-
-      const { data: userCredits, error } = await supabase
-        .from('user_credits')
-        .select('balance')
-        .eq('user_id', session.user.id)
-        .single()
-
-      if (error) {
-        toast({
-          title: "Error fetching credits",
-          description: error.message,
-          variant: "destructive",
-        })
-        return
-      }
-
-      if (userCredits) {
-        setCredits(userCredits.balance)
-      }
-    }
-
     const fetchCreditPackage = async () => {
       const { data: package_data, error } = await supabase
         .from('credit_packages')
@@ -57,9 +27,8 @@ export const CreditInfo = () => {
       }
     }
 
-    fetchUserCredits()
     fetchCreditPackage()
-  }, [toast])
+  }, [])
 
   const handlePurchaseCredits = async () => {
     try {
@@ -100,36 +69,18 @@ export const CreditInfo = () => {
   return (
     <footer className="bg-white bg-opacity-80 backdrop-blur-md shadow-sm mt-8 relative z-20">
       <div className="container mx-auto px-4 py-6 text-center text-gray-600">
-        <div className="mb-4">
-          <p className="text-lg font-medium">Available Credits: {credits}</p>
-          <p className="text-sm text-gray-500 mt-1">Each generation uses 1 credit</p>
-        </div>
+        <CreditBalance />
         
         <div className="space-y-4">
-          <div className="flex items-center justify-center space-x-2">
-            <Button 
-              onClick={() => {
-                setShowCustomAmount(false)
-                handlePurchaseCredits()
-              }}
-              disabled={isLoading}
-              className="bg-emerald-500 hover:bg-emerald-600 text-white"
-            >
-              <CreditCard className="w-4 h-4 mr-2" />
-              Get {creditsPerPackage} generations for ${basePrice}
-            </Button>
-            
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger>
-                  <Info className="w-4 h-4 text-gray-400 hover:text-gray-600" />
-                </TooltipTrigger>
-                <TooltipContent className="max-w-xs">
-                  <p>This is our minimum price to cover compute costs and ensure quality service.</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </div>
+          <StandardPurchaseButton
+            basePrice={basePrice}
+            creditsPerPackage={creditsPerPackage}
+            onPurchase={() => {
+              setShowCustomAmount(false)
+              handlePurchaseCredits()
+            }}
+            isLoading={isLoading}
+          />
 
           <div className="text-center">
             <button
@@ -140,33 +91,14 @@ export const CreditInfo = () => {
             </button>
 
             {showCustomAmount && (
-              <div className="mt-4 space-y-3">
-                <p className="text-sm text-gray-600">
-                  If our service has saved you valuable time, you can choose to pay more for the same {creditsPerPackage} generations.
-                </p>
-                <div className="flex items-center justify-center space-x-2">
-                  <input
-                    type="number"
-                    min={basePrice}
-                    step="0.01"
-                    value={customAmount}
-                    onChange={(e) => setCustomAmount(Number(e.target.value))}
-                    className="w-24 px-2 py-1 border rounded text-center"
-                  />
-                  <Button 
-                    onClick={handlePurchaseCredits}
-                    disabled={isLoading || customAmount < basePrice}
-                    className="bg-emerald-500 hover:bg-emerald-600 text-white"
-                  >
-                    Support with ${customAmount}
-                  </Button>
-                </div>
-                {customAmount > basePrice && (
-                  <p className="text-sm text-emerald-600">
-                    Thank you for your generous support! 🙏
-                  </p>
-                )}
-              </div>
+              <CustomAmountInput
+                basePrice={basePrice}
+                customAmount={customAmount}
+                setCustomAmount={setCustomAmount}
+                onPurchase={handlePurchaseCredits}
+                isLoading={isLoading}
+                creditsPerPackage={creditsPerPackage}
+              />
             )}
           </div>
         </div>
