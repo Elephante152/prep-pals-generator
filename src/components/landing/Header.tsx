@@ -13,10 +13,14 @@ export const Header = ({ onLogin }: HeaderProps) => {
 
   const handleLogin = async () => {
     try {
+      // Get the current domain
+      const redirectUrl = `${window.location.origin}/auth/callback`;
+      console.log('Login Redirect URL:', redirectUrl); // Debug log
+
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
+          redirectTo: redirectUrl,
           queryParams: {
             access_type: 'offline',
             prompt: 'consent',
