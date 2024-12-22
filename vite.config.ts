@@ -22,5 +22,5 @@ export default defineConfig(({ mode }) => ({
     sourcemap: true,
     outDir: 'dist'
   },
-  base: '/'
+  base: '/MPGv2/'
 }));

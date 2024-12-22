@@ -12,7 +12,11 @@
       (function() {
         const { protocol, hostname, pathname } = window.location;
         const baseTag = document.createElement('base');
-        baseTag.href = `${protocol}//${hostname}${pathname.replace(/\/[^/]*$/, '/')}`; 
+        if (hostname === 'mealprepgenie.xyz') {
+          baseTag.href = `${protocol}//${hostname}/`;
+        } else {
+          baseTag.href = `${protocol}//${hostname}${pathname.replace(/\/[^/]*$/, '/')}`;
+        }
         document.head.prepend(baseTag);
       })();
     </script>
@@ -20,7 +24,13 @@
 
   <body>
     <div id="root"></div>
-    <script src="https://cdn.gpteng.co/gptengineer.js" type="module" crossorigin="anonymous"></script>
+    <script 
+      src="https://cdn.gpteng.co/gptengineer.js" 
+      type="module" 
+      crossorigin="anonymous"
+      async
+      defer
+    ></script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
