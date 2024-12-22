@@ -127,6 +127,63 @@ Due to the ongoing deployment configuration, we strongly recommend:
 3. All authentication methods fully functional
 4. Complete feature set available for testing
 
+## Development Log (Devlog)
+
+### Week 1: Project Setup and Core Infrastructure
+- Successfully set up React + TypeScript project with Vite
+- Integrated Supabase for backend services
+- Implemented basic authentication flow
+- **Challenges**: Initial CORS issues with Supabase integration resolved through proper environment configuration
+- **Learning**: Importance of proper environment setup for OAuth flows
+
+### Week 2: AI Integration and Payment Processing
+- Integrated OpenAI API through Supabase Edge Functions
+- Implemented Stripe payment processing
+- Created credit system architecture
+- **Challenges**: 
+  - Complex state management for user credits resolved using React Query
+  - Edge function timeout issues solved by optimizing API calls
+- **Learning**: Effective patterns for handling asynchronous operations with Edge Functions
+
+### Week 3: User Experience and Security
+- Implemented responsive UI with shadcn/ui
+- Added comprehensive error handling
+- Enhanced security with Row Level Security (RLS)
+- **Challenges**:
+  - Mobile responsiveness issues addressed through Tailwind's responsive classes
+  - RLS policy conflicts resolved through careful permission mapping
+- **Learning**: Importance of thorough testing across different devices and user scenarios
+
+### Week 4: Testing and Deployment
+- Deployed to GitHub Pages
+- Implemented comprehensive error boundaries
+- Added toast notifications for better UX
+- **Challenges**:
+  - HTTPS certificate issues with GitHub Pages (ongoing)
+  - DNS propagation delays affecting production deployment
+- **Learning**: 
+  - Importance of early deployment testing
+  - Value of maintaining detailed deployment documentation
+
+### Key Technical Insights
+1. **Authentication Flow**
+   - OAuth implementation requires careful consideration of redirect URIs
+   - Session management crucial for maintaining user state
+
+2. **API Integration**
+   - Edge Functions provide excellent middleware capability
+   - Rate limiting and error handling essential for AI endpoints
+
+3. **Security Considerations**
+   - RLS policies need careful planning
+   - Environment variable management crucial for security
+
+### Future Improvements
+1. Enhanced error recovery mechanisms
+2. Expanded test coverage
+3. Performance optimizations for AI responses
+4. Additional payment integration options
+
 ## Contributing
 This is an MVP version. For feature requests or bug reports, please open an issue in the repository.
 
