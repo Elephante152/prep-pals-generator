@@ -10,48 +10,51 @@ export const AuthCallback = () => {
   useEffect(() => {
     const handleAuthCallback = async () => {
       try {
-        // Get the current session
-        const { data: { session }, error } = await supabase.auth.getSession();
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
         
-        if (error) {
-          console.error('Auth callback error:', error);
+        if (sessionError) {
+          console.error('Session error:', sessionError);
           toast({
             title: "Authentication Error",
-            description: error.message,
+            description: sessionError.message,
             variant: "destructive",
           });
           navigate('/');
           return;
         }
 
-        if (session) {
-          console.log('Session found:', session);
-          
-          // Check if user has credits (completed onboarding)
-          const { data: userCredits, error: creditsError } = await supabase
-            .from('user_credits')
-            .select('*')
-            .eq('user_id', session.user.id)
-            .single();
-
-          if (creditsError) {
-            console.error('Error fetching user credits:', creditsError);
-          }
-
-          console.log('User credits:', userCredits);
-
-          if (!userCredits) {
-            console.log('Redirecting to onboarding...');
-            navigate('/onboarding');
-          } else {
-            console.log('Redirecting to dashboard...');
-            navigate('/dashboard');
-          }
-        } else {
+        if (!session) {
           console.log('No session found, redirecting to home...');
           navigate('/');
+          return;
         }
-      } catch (error) {
+
+        console.log('Session found:', session);
+        
+        // Check if user has credits (completed onboarding)
+        const { data: userCredits, error: creditsError } = await supabase
+          .from('user_credits')
+          .select('*')
+          .eq('user_id', session.user.id)
+          .single();
+
+        if (creditsError) {
+          console.error('Error fetching user credits:', creditsError);
+          toast({
+            title: "Error",
+            description: "Failed to fetch user credits",
+            variant: "destructive",
+          });
+        }
+
+        if (!userCredits) {
+          console.log('No user credits found, redirecting to onboarding...');
+          navigate('/onboarding');
+        } else {
+          console.log('User credits found, redirecting to dashboard...');
+          navigate('/dashboard');
+        }
+      } catch (error: any) {
         console.error('Unexpected error:', error);
         toast({
           title: "Authentication Error",
