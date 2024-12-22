@@ -11,26 +11,47 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { AnimatedGradientText } from './AnimatedGradientText';
 import { useNavigate } from 'react-router-dom';
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/components/ui/use-toast";
 
 export const SignUpFlow = () => {
-  const [email, setEmail] = useState('');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const { toast } = useToast();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitted(true);
-    setTimeout(() => {
-      setIsDialogOpen(false);
-      setIsSubmitted(false);
-      setEmail('');
-      navigate('/onboarding'); // Redirect to onboarding after signup
-    }, 2000);
+  const handleGoogleSignIn = async () => {
+    try {
+      setIsLoading(true);
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/dashboard`,
+          queryParams: {
+            access_type: 'offline',
+            prompt: 'consent',
+          },
+        },
+      });
+
+      if (error) {
+        toast({
+          title: "Authentication Error",
+          description: error.message,
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Authentication Error",
+        description: "An unexpected error occurred. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -49,35 +70,16 @@ export const SignUpFlow = () => {
             Join MealPrepGenie today and transform your meal planning experience.
           </DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4 mt-4">
-          <div>
-            <Label htmlFor="email">Email address</Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="you@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="mt-1"
-            />
-          </div>
-          <DialogFooter className="mt-6">
-            <Button type="submit" className="w-full bg-emerald-500 text-white hover:bg-emerald-600">
-              {isSubmitted ? (
-                <motion.span
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="flex items-center"
-                >
-                  <Check className="mr-2 h-4 w-4" /> Success!
-                </motion.span>
-              ) : (
-                'Create Account'
-              )}
-            </Button>
-          </DialogFooter>
-        </form>
+        <div className="flex flex-col gap-4 mt-4">
+          <Button 
+            onClick={handleGoogleSignIn}
+            disabled={isLoading}
+            className="w-full flex items-center justify-center gap-2 bg-white text-gray-700 border border-gray-300 hover:bg-gray-50"
+          >
+            <img src="/google.svg" alt="Google" className="w-5 h-5" />
+            {isLoading ? 'Signing in...' : 'Continue with Google'}
+          </Button>
+        </div>
       </DialogContent>
     </Dialog>
   );
