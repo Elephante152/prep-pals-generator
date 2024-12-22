@@ -70,8 +70,36 @@ The following environment variables are required:
 - `VITE_SUPABASE_ANON_KEY`: Supabase anonymous key
 - `VITE_STRIPE_PUBLIC_KEY`: Stripe public key
 
+## Testing Instructions
+
+### Authentication Setup
+The application supports multiple testing environments:
+
+1. **Production Environment**:
+   - URL: [mealprepgenie.xyz](https://mealprepgenie.xyz)
+   - Fully configured for production use
+
+2. **Lovable Preview Environment**:
+   - URL: Available through publish.lovable.dev
+   - Configured for testing and review purposes
+
+3. **Local Development**:
+   - URL: http://localhost:5173
+   - Suitable for local testing and development
+
+### For Instructors
+- Test user access has been configured for ben@circuitstream.ca
+- OAuth authentication is pre-configured for all testing environments
+- No additional setup required for authentication testing
+
+### Supported Testing Environments
+The application is configured to work seamlessly across:
+- Production domain (mealprepgenie.xyz)
+- Lovable preview environment (publish.lovable.dev)
+- Local development (localhost:5173)
+
 ## Deployment Status
-The application will be available at [mealprepgenie.xyz](https://mealprepgenie.xyz) once DNS propagation is complete and HTTPS certification is processed through GitHub Pages. This process typically takes 24-48 hours from initial setup.
+The application is currently live at [mealprepgenie.xyz](https://mealprepgenie.xyz).
 
 ## Contributing
 This is an MVP version. For feature requests or bug reports, please open an issue in the repository.
