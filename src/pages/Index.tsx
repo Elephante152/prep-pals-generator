@@ -5,23 +5,52 @@ import { GenieAnimation } from '@/components/GenieAnimation';
 import { BenefitCard } from '@/components/BenefitCard';
 import { StepCard } from '@/components/StepCard';
 import { SignUpFlow } from '@/components/SignUpFlow';
+import { supabase } from "@/integrations/supabase/client";
+import { useNavigate } from 'react-router-dom';
+import { useToast } from "@/components/ui/use-toast";
 
 const Index = () => {
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
+  const handleLogin = async () => {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${window.location.origin}/dashboard`
+      }
+    });
+
+    if (error) {
+      toast({
+        title: "Login Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
       <header className="relative z-10 bg-white bg-opacity-90 backdrop-blur-md border-b">
         <div className="container mx-auto px-4 py-4">
+
           <nav className="flex justify-between items-center">
             <div className="flex items-center space-x-2">
               <AnimatedGradientText text="MealPrepGenie" className="text-2xl font-bold" />
             </div>
             <div className="flex items-center space-x-4">
-              <Button variant="ghost" className="text-gray-600 hover:text-gray-900">
+              <Button 
+                variant="ghost" 
+                className="text-gray-600 hover:text-gray-900"
+                onClick={handleLogin}
+              >
                 Login
               </Button>
               <SignUpFlow />
             </div>
           </nav>
+
         </div>
       </header>
 
@@ -188,6 +217,3 @@ const Index = () => {
       </footer>
     </div>
   );
-};
-
-export default Index;

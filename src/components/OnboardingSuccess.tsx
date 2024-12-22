@@ -9,6 +9,8 @@ import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { AnimatedGradientText } from './AnimatedGradientText';
+import { useNavigate } from 'react-router-dom';
+import { useToast } from "@/components/ui/use-toast";
 
 const dietTypes = ['Omnivore', 'Vegetarian', 'Vegan', 'Pescatarian', 'Keto', 'Paleo'];
 const activityLevels = ['Sedentary', 'Lightly Active', 'Moderately Active', 'Very Active', 'Extremely Active'];
@@ -16,6 +18,9 @@ const cuisines = ['Italian', 'Mexican', 'Japanese', 'Indian', 'American', 'Frenc
 const cookingTools = ['Stove top', 'Oven', 'Microwave', 'Slow cooker', 'Pressure cooker', 'Air fryer', 'Grill', 'Blender'];
 
 export const OnboardingSuccess = () => {
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  
   const [dietType, setDietType] = useState('Omnivore');
   const [allergies, setAllergies] = useState('');
   const [favoriteCuisines, setFavoriteCuisines] = useState<string[]>([]);
@@ -40,18 +45,37 @@ export const OnboardingSuccess = () => {
     );
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would typically send this data to your backend
-    console.log({
-      dietType,
-      allergies,
-      favoriteCuisines,
-      activityLevel,
-      calorieIntake,
-      mealsPerDay,
-      preferredCookingTools
-    });
+    try {
+      // Here you would typically send this data to your backend
+      console.log({
+        dietType,
+        allergies,
+        favoriteCuisines,
+        activityLevel,
+        calorieIntake,
+        mealsPerDay,
+        preferredCookingTools
+      });
+      
+      toast({
+        title: "Success!",
+        description: "Your preferences have been saved.",
+      });
+      
+      navigate('/dashboard');
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to save preferences. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleSkip = () => {
+    navigate('/dashboard');
   };
 
   return (
@@ -199,7 +223,11 @@ export const OnboardingSuccess = () => {
         </form>
 
         <div className="mt-8 text-center">
-          <Button variant="link" className="text-emerald-600 hover:text-emerald-700 font-medium">
+          <Button 
+            variant="link" 
+            className="text-emerald-600 hover:text-emerald-700 font-medium"
+            onClick={handleSkip}
+          >
             Skip for now and go to Dashboard
           </Button>
         </div>
