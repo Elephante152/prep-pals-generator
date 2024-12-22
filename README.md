@@ -6,6 +6,16 @@
 - These issues manifest as blank screens during login/signup attempts
 - Expected resolution time: 24-48 hours for full HTTPS and DNS propagation
 
+### For BEN
+Dear Ben,
+
+I apologize for the delayed submission and current deployment challenges. While working on this project, I encountered several technical hurdles, particularly with backend implementation. I leveraged AI tools like Lovable AI and ChatGPT to help overcome these challenges, especially with Supabase integration, OpenAI API implementation, and Stripe payment processing.
+
+For evaluation purposes, I strongly recommend testing the application locally where all features are fully functional. I've provided detailed setup instructions below to ensure a smooth review process.
+
+Best regards,
+[Your Name]
+
 ### Recommended Testing Approach
 Due to the ongoing deployment configuration, we strongly recommend:
 
