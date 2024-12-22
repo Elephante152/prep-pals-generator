@@ -76,7 +76,7 @@ MealPrepGenie is an AI-powered meal planning assistant that helps users create p
 
 ## Testing Instructions
 
-### For Instructors
+### For BEN
 - Primary test account: ben@circuitstream.ca
 - **Recommended**: Use local development environment
 - All features fully functional in local setup
