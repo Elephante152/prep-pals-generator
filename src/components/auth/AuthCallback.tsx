@@ -10,6 +10,7 @@ export const AuthCallback = () => {
   useEffect(() => {
     const handleAuthCallback = async () => {
       try {
+        // Get the current session
         const { data: { session }, error } = await supabase.auth.getSession();
         
         if (error) {
@@ -24,19 +25,30 @@ export const AuthCallback = () => {
         }
 
         if (session) {
+          console.log('Session found:', session);
+          
           // Check if user has credits (completed onboarding)
-          const { data: userCredits } = await supabase
+          const { data: userCredits, error: creditsError } = await supabase
             .from('user_credits')
             .select('*')
             .eq('user_id', session.user.id)
             .single();
 
+          if (creditsError) {
+            console.error('Error fetching user credits:', creditsError);
+          }
+
+          console.log('User credits:', userCredits);
+
           if (!userCredits) {
+            console.log('Redirecting to onboarding...');
             navigate('/onboarding');
           } else {
+            console.log('Redirecting to dashboard...');
             navigate('/dashboard');
           }
         } else {
+          console.log('No session found, redirecting to home...');
           navigate('/');
         }
       } catch (error) {

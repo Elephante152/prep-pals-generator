@@ -25,9 +25,9 @@ export const SignUpFlow = () => {
     try {
       setIsLoading(true);
       const redirectUrl = `${window.location.origin}/auth/callback`;
-      console.log('Redirect URL:', redirectUrl);
+      console.log('Sign Up Flow - Redirect URL:', redirectUrl);
 
-      const { data, error } = await supabase.auth.signInWithOAuth({
+      const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
           redirectTo: redirectUrl,

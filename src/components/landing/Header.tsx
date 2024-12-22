@@ -13,11 +13,10 @@ export const Header = ({ onLogin }: HeaderProps) => {
 
   const handleLogin = async () => {
     try {
-      // Get the current domain
       const redirectUrl = `${window.location.origin}/auth/callback`;
-      console.log('Login Redirect URL:', redirectUrl); // Debug log
+      console.log('Header Login - Redirect URL:', redirectUrl);
 
-      const { data, error } = await supabase.auth.signInWithOAuth({
+      const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
           redirectTo: redirectUrl,
@@ -29,6 +28,7 @@ export const Header = ({ onLogin }: HeaderProps) => {
       });
 
       if (error) {
+        console.error('Login Error:', error);
         toast({
           title: "Login Error",
           description: error.message,
@@ -36,6 +36,7 @@ export const Header = ({ onLogin }: HeaderProps) => {
         });
       }
     } catch (error) {
+      console.error('Unexpected Login Error:', error);
       toast({
         title: "Login Error",
         description: "An unexpected error occurred. Please try again.",
