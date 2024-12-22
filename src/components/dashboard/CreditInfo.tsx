@@ -3,12 +3,14 @@ import { useToast } from "@/hooks/use-toast"
 import { supabase } from "@/integrations/supabase/client"
 import { Link } from 'react-router-dom'
 import { CreditCard } from 'lucide-react'
+import { Button } from "@/components/ui/button"
 
 export const CreditInfo = () => {
   const { toast } = useToast()
   const [credits, setCredits] = useState(0)
   const [basePrice, setBasePrice] = useState(2.99)
   const [creditsPerPackage, setCreditsPerPackage] = useState(10)
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     const fetchUserCredits = async () => {
@@ -51,14 +53,52 @@ export const CreditInfo = () => {
     fetchCreditPackage()
   }, [toast])
 
+  const handlePurchaseCredits = async () => {
+    try {
+      setIsLoading(true)
+      const { data: { session } } = await supabase.auth.getSession()
+      
+      if (!session) {
+        toast({
+          title: "Authentication required",
+          description: "Please sign in to purchase credits",
+          variant: "destructive",
+        })
+        return
+      }
+
+      const { data, error } = await supabase.functions.invoke('create-checkout', {
+        body: { },
+      })
+
+      if (error) throw error
+
+      if (data?.url) {
+        window.location.href = data.url
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      })
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   return (
     <footer className="bg-white bg-opacity-80 backdrop-blur-md shadow-sm mt-8 relative z-20">
       <div className="container mx-auto px-4 py-4 text-center text-gray-600">
-        <p>Available Credits: {credits}</p>
-        <Link to="/credits" className="text-emerald-600 hover:text-emerald-700 font-medium">
+        <p className="mb-2">Available Credits: {credits}</p>
+        <Button 
+          onClick={handlePurchaseCredits} 
+          disabled={isLoading}
+          className="bg-emerald-500 hover:bg-emerald-600 text-white"
+        >
+          <CreditCard className="w-4 h-4 mr-2" />
           Get {creditsPerPackage} generations for ${basePrice}
-          <CreditCard className="inline w-4 h-4 ml-1" />
-        </Link>
+        </Button>
       </div>
     </footer>
   )
