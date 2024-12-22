@@ -1,29 +1,54 @@
+import { useEffect } from 'react';
+import { Button } from "@/components/ui/button";
+import { AnimatedGradientText } from '@/components/AnimatedGradientText';
+import { SignUpFlow } from '@/components/SignUpFlow';
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from 'react-router-dom';
-import { useToast } from "@/components/ui/use-toast";
-import { Header } from "@/components/landing/Header";
-import { HeroSection } from "@/components/landing/HeroSection";
-import { BenefitsSection } from "@/components/landing/BenefitsSection";
-import { HowItWorksSection } from "@/components/landing/HowItWorksSection";
-import { CTASection } from "@/components/landing/CTASection";
-import { Footer } from "@/components/landing/Footer";
+import { useToast } from "@/hooks/use-toast";
 
 const Index = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  const handleLogin = async () => {
-    const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: `${window.location.origin}/dashboard`
+  useEffect(() => {
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        navigate('/dashboard');
+      }
+    };
+    
+    checkSession();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session) {
+        navigate('/dashboard');
       }
     });
 
-    if (error) {
+    return () => subscription.unsubscribe();
+  }, [navigate]);
+
+  const handleLogin = async () => {
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/dashboard`
+        }
+      });
+
+      if (error) {
+        toast({
+          title: "Login Error",
+          description: error.message,
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
       toast({
         title: "Login Error",
-        description: error.message,
+        description: "An unexpected error occurred. Please try again.",
         variant: "destructive",
       });
     }
@@ -31,14 +56,33 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-      <Header onLogin={handleLogin} />
+      <header className="relative z-10 bg-white bg-opacity-90 backdrop-blur-md border-b">
+        <div className="container mx-auto px-4 py-4">
+          <nav className="flex justify-between items-center">
+            <div className="flex items-center space-x-2">
+              <AnimatedGradientText text="MealPrepGenie" className="text-2xl font-bold" />
+            </div>
+            <div className="flex items-center space-x-4">
+              <Button 
+                variant="ghost" 
+                className="text-gray-600 hover:text-gray-900"
+                onClick={handleLogin}
+              >
+                Login with Google
+              </Button>
+              <SignUpFlow />
+            </div>
+          </nav>
+        </div>
+      </header>
+
       <main>
-        <HeroSection />
-        <BenefitsSection />
-        <HowItWorksSection />
-        <CTASection />
+        {/* Add your main content here */}
       </main>
-      <Footer />
+
+      <footer>
+        {/* Add your footer content here */}
+      </footer>
     </div>
   );
 };
