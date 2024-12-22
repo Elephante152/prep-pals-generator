@@ -18,9 +18,6 @@ const queryClient = new QueryClient({
   },
 });
 
-// Get the base URL from the Vite configuration
-const baseUrl = import.meta.env.BASE_URL;
-
 const App = () => {
   return (
     <React.StrictMode>
@@ -28,7 +25,7 @@ const App = () => {
         <TooltipProvider>
           <Toaster />
           <Sonner />
-          <BrowserRouter basename={baseUrl}>
+          <BrowserRouter>
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/dashboard" element={<Dashboard />} />
