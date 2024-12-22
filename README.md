@@ -3,6 +3,7 @@
 ## Project info
 
 **URL**: https://lovable.dev/projects/baa8793c-44ff-461c-9c04-5eed558330c2
+**GitHub Repository**: https://github.com/Elephante152/MPGv2.git
 
 ## How can I edit this code?
 
@@ -24,10 +25,10 @@ Follow these steps:
 
 ```sh
 # Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+git clone https://github.com/Elephante152/MPGv2.git
 
 # Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+cd MPGv2
 
 # Step 3: Install the necessary dependencies.
 npm i
@@ -38,13 +39,13 @@ npm run dev
 
 **Edit a file directly in GitHub**
 
-- Navigate to the desired file(s).
+- Navigate to the desired file(s) in the [GitHub repository](https://github.com/Elephante152/MPGv2).
 - Click the "Edit" button (pencil icon) at the top right of the file view.
 - Make your changes and commit the changes.
 
 **Use GitHub Codespaces**
 
-- Navigate to the main page of your repository.
+- Navigate to the main page of the [repository](https://github.com/Elephante152/MPGv2).
 - Click on the "Code" button (green button) near the top right.
 - Select the "Codespaces" tab.
 - Click on "New codespace" to launch a new Codespace environment.
@@ -52,13 +53,15 @@ npm run dev
 
 ## What technologies are used for this project?
 
-This project is built with .
+This project is built with:
 
 - Vite
 - TypeScript
 - React
 - shadcn-ui
 - Tailwind CSS
+- Supabase for backend services
+- Stripe for payment processing
 
 ## How can I deploy this project?
 
