@@ -1,10 +1,13 @@
 import { useEffect } from 'react';
-import { Button } from "@/components/ui/button";
-import { AnimatedGradientText } from '@/components/AnimatedGradientText';
-import { SignUpFlow } from '@/components/SignUpFlow';
-import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from 'react-router-dom';
+import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { Header } from "@/components/landing/Header";
+import { HeroSection } from "@/components/landing/HeroSection";
+import { HowItWorksSection } from "@/components/landing/HowItWorksSection";
+import { BenefitsSection } from "@/components/landing/BenefitsSection";
+import { CTASection } from "@/components/landing/CTASection";
+import { Footer } from "@/components/landing/Footer";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -55,34 +58,15 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-      <header className="relative z-10 bg-white bg-opacity-90 backdrop-blur-md border-b">
-        <div className="container mx-auto px-4 py-4">
-          <nav className="flex justify-between items-center">
-            <div className="flex items-center space-x-2">
-              <AnimatedGradientText text="MealPrepGenie" className="text-2xl font-bold" />
-            </div>
-            <div className="flex items-center space-x-4">
-              <Button 
-                variant="ghost" 
-                className="text-gray-600 hover:text-gray-900"
-                onClick={handleLogin}
-              >
-                Login with Google
-              </Button>
-              <SignUpFlow />
-            </div>
-          </nav>
-        </div>
-      </header>
-
+    <div className="min-h-screen">
+      <Header onLogin={handleLogin} />
       <main>
-        {/* Add your main content here */}
+        <HeroSection />
+        <HowItWorksSection />
+        <BenefitsSection />
+        <CTASection />
       </main>
-
-      <footer>
-        {/* Add your footer content here */}
-      </footer>
+      <Footer />
     </div>
   );
 };
