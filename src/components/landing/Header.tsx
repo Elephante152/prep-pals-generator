@@ -13,9 +13,16 @@ export const Header = ({ onLogin }: HeaderProps) => {
 
   const handleLogin = async () => {
     try {
-      const redirectUrl = `${window.location.origin}/auth/callback`;
-      console.log('Login - Current origin:', window.location.origin);
-      console.log('Login - Full redirect URL:', redirectUrl);
+      const { origin, protocol, host } = window.location;
+      const redirectUrl = `${origin}/auth/callback`;
+      
+      console.log('OAuth Debug Info:', {
+        origin,
+        protocol,
+        host,
+        redirectUrl,
+        currentUrl: window.location.href
+      });
 
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
@@ -25,18 +32,16 @@ export const Header = ({ onLogin }: HeaderProps) => {
             access_type: 'offline',
             prompt: 'consent',
           },
-          skipBrowserRedirect: false
         },
       });
 
       if (error) {
-        console.error('Login error:', error);
-        console.error('Error details:', {
+        console.error('Login error:', {
           message: error.message,
           status: error.status,
           name: error.name,
           redirectUrl,
-          origin: window.location.origin,
+          origin,
           href: window.location.href
         });
         toast({
