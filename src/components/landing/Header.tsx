@@ -13,10 +13,8 @@ export const Header = ({ onLogin }: HeaderProps) => {
 
   const handleLogin = async () => {
     try {
-      // Get the current domain and ensure it's properly formatted
-      const baseUrl = window.location.origin.replace(/\/$/, '').replace(/:\/$/, '');
-      const redirectUrl = `${baseUrl}/auth/callback`;
-      console.log('Login Redirect URL:', redirectUrl); // Debug log
+      const redirectUrl = `${window.location.origin}/auth/callback`;
+      console.log('Login Redirect URL:', redirectUrl);
 
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
@@ -30,12 +28,13 @@ export const Header = ({ onLogin }: HeaderProps) => {
       });
 
       if (error) {
-        console.error('Login error:', error); // Debug log
+        console.error('Login error:', error);
         console.error('Error details:', {
           message: error.message,
           status: error.status,
-          name: error.name
-        }); // Additional error details
+          name: error.name,
+          redirectUrl
+        });
         toast({
           title: "Login Error",
           description: error.message,
@@ -44,18 +43,17 @@ export const Header = ({ onLogin }: HeaderProps) => {
         return;
       }
 
-      // If we have data but no error, log success
       if (data) {
-        console.log('Login successful:', data); // Debug log
+        console.log('Login successful:', data);
       }
     } catch (error) {
-      console.error('Unexpected error during login:', error); // Debug log
+      console.error('Unexpected error during login:', error);
       if (error instanceof Error) {
         console.error('Error details:', {
           message: error.message,
           name: error.name,
           stack: error.stack
-        }); // Additional error details
+        });
       }
       toast({
         title: "Login Error",

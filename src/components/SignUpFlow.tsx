@@ -24,10 +24,8 @@ export const SignUpFlow = () => {
   const handleGoogleSignIn = async () => {
     try {
       setIsLoading(true);
-      // Get the current domain and ensure it's properly formatted
-      const baseUrl = window.location.origin.replace(/\/$/, '').replace(/:\/$/, '');
-      const redirectUrl = `${baseUrl}/auth/callback`;
-      console.log('Sign Up Redirect URL:', redirectUrl); // Debug log
+      const redirectUrl = `${window.location.origin}/auth/callback`;
+      console.log('Sign Up Redirect URL:', redirectUrl);
 
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
@@ -41,12 +39,13 @@ export const SignUpFlow = () => {
       });
 
       if (error) {
-        console.error('Google Sign In Error:', error); // Debug log
+        console.error('Google Sign In Error:', error);
         console.error('Error details:', {
           message: error.message,
           status: error.status,
-          name: error.name
-        }); // Additional error details
+          name: error.name,
+          redirectUrl
+        });
         toast({
           title: "Authentication Error",
           description: error.message,
@@ -55,18 +54,17 @@ export const SignUpFlow = () => {
         return;
       }
 
-      // If we have data but no error, log success
       if (data) {
-        console.log('Sign in successful:', data); // Debug log
+        console.log('Sign in successful:', data);
       }
     } catch (error) {
-      console.error('Unexpected Error:', error); // Debug log
+      console.error('Unexpected Error:', error);
       if (error instanceof Error) {
         console.error('Error details:', {
           message: error.message,
           name: error.name,
           stack: error.stack
-        }); // Additional error details
+        });
       }
       toast({
         title: "Authentication Error",
