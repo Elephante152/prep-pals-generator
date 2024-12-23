@@ -1,7 +1,7 @@
 # MealPrepGenie MVP
 
 ## ⚠️ Important Notice for Evaluators
-**Current Deployment Status (as of March 19, 2024):**
+**Current Deployment Status:**
 - The production site (mealprepgenie.xyz) is experiencing authentication issues due to ongoing HTTPS certificate provisioning and DNS propagation
 - These issues manifest as blank screens during login/signup attempts
 - Expected resolution time: 24-48 hours for full HTTPS and DNS propagation
