@@ -7,7 +7,7 @@
 - Expected resolution time: 24-48 hours for full HTTPS and DNS propagation
 
 ### Recommended Testing Approach
-Due to the ongoing deployment configuration, we strongly recommend:
+Due to the ongoing deployment configuration, I strongly recommend:
 
 1. **Local Testing Environment**
    ```bash
