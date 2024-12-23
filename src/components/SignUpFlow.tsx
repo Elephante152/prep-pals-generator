@@ -25,7 +25,8 @@ export const SignUpFlow = () => {
     try {
       setIsLoading(true);
       const redirectUrl = `${window.location.origin}/auth/callback`;
-      console.log('Attempting Google Sign In with redirect URL:', redirectUrl);
+      console.log('Google Sign In - Current origin:', window.location.origin);
+      console.log('Google Sign In - Full redirect URL:', redirectUrl);
 
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
@@ -35,7 +36,7 @@ export const SignUpFlow = () => {
             access_type: 'offline',
             prompt: 'consent',
           },
-          skipBrowserRedirect: false // Ensure browser redirect happens
+          skipBrowserRedirect: false
         },
       });
 
@@ -46,7 +47,8 @@ export const SignUpFlow = () => {
           status: error.status,
           name: error.name,
           redirectUrl,
-          origin: window.location.origin
+          origin: window.location.origin,
+          href: window.location.href
         });
         toast({
           title: "Authentication Error",
@@ -58,7 +60,6 @@ export const SignUpFlow = () => {
 
       if (data) {
         console.log('Sign in initiated successfully:', data);
-        // The redirect will happen automatically
       }
     } catch (error) {
       console.error('Unexpected Error:', error);
@@ -67,7 +68,8 @@ export const SignUpFlow = () => {
           message: error.message,
           name: error.name,
           stack: error.stack,
-          origin: window.location.origin
+          origin: window.location.origin,
+          href: window.location.href
         });
       }
       toast({
