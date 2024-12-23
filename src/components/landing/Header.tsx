@@ -14,7 +14,7 @@ export const Header = ({ onLogin }: HeaderProps) => {
   const handleLogin = async () => {
     try {
       const redirectUrl = `${window.location.origin}/auth/callback`;
-      console.log('Login Redirect URL:', redirectUrl);
+      console.log('Attempting login with redirect URL:', redirectUrl);
 
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
@@ -24,6 +24,7 @@ export const Header = ({ onLogin }: HeaderProps) => {
             access_type: 'offline',
             prompt: 'consent',
           },
+          skipBrowserRedirect: false // Ensure browser redirect happens
         },
       });
 
@@ -33,18 +34,20 @@ export const Header = ({ onLogin }: HeaderProps) => {
           message: error.message,
           status: error.status,
           name: error.name,
-          redirectUrl
+          redirectUrl,
+          origin: window.location.origin
         });
         toast({
           title: "Login Error",
-          description: error.message,
+          description: "Unable to connect to Google. Please try again.",
           variant: "destructive",
         });
         return;
       }
 
       if (data) {
-        console.log('Login successful:', data);
+        console.log('Login initiated successfully:', data);
+        // The redirect will happen automatically
       }
     } catch (error) {
       console.error('Unexpected error during login:', error);
@@ -52,7 +55,8 @@ export const Header = ({ onLogin }: HeaderProps) => {
         console.error('Error details:', {
           message: error.message,
           name: error.name,
-          stack: error.stack
+          stack: error.stack,
+          origin: window.location.origin
         });
       }
       toast({

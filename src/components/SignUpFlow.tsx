@@ -25,7 +25,7 @@ export const SignUpFlow = () => {
     try {
       setIsLoading(true);
       const redirectUrl = `${window.location.origin}/auth/callback`;
-      console.log('Sign Up Redirect URL:', redirectUrl);
+      console.log('Attempting Google Sign In with redirect URL:', redirectUrl);
 
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
@@ -35,6 +35,7 @@ export const SignUpFlow = () => {
             access_type: 'offline',
             prompt: 'consent',
           },
+          skipBrowserRedirect: false // Ensure browser redirect happens
         },
       });
 
@@ -44,18 +45,20 @@ export const SignUpFlow = () => {
           message: error.message,
           status: error.status,
           name: error.name,
-          redirectUrl
+          redirectUrl,
+          origin: window.location.origin
         });
         toast({
           title: "Authentication Error",
-          description: error.message,
+          description: "Unable to connect to Google. Please try again.",
           variant: "destructive",
         });
         return;
       }
 
       if (data) {
-        console.log('Sign in successful:', data);
+        console.log('Sign in initiated successfully:', data);
+        // The redirect will happen automatically
       }
     } catch (error) {
       console.error('Unexpected Error:', error);
@@ -63,7 +66,8 @@ export const SignUpFlow = () => {
         console.error('Error details:', {
           message: error.message,
           name: error.name,
-          stack: error.stack
+          stack: error.stack,
+          origin: window.location.origin
         });
       }
       toast({
@@ -99,7 +103,7 @@ export const SignUpFlow = () => {
             className="w-full flex items-center justify-center gap-2 bg-white text-gray-700 border border-gray-300 hover:bg-gray-50"
           >
             <img src="/google.svg" alt="Google" className="w-5 h-5" />
-            {isLoading ? 'Signing in...' : 'Continue with Google'}
+            {isLoading ? 'Connecting to Google...' : 'Continue with Google'}
           </Button>
         </div>
       </DialogContent>
