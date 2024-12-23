@@ -13,8 +13,9 @@ export const Header = ({ onLogin }: HeaderProps) => {
 
   const handleLogin = async () => {
     try {
-      // Get the current domain
-      const redirectUrl = `${window.location.origin}/auth/callback`;
+      // Get the current domain without trailing slash
+      const baseUrl = window.location.origin.replace(/\/$/, '');
+      const redirectUrl = `${baseUrl}/auth/callback`;
       console.log('Login Redirect URL:', redirectUrl); // Debug log
 
       const { data, error } = await supabase.auth.signInWithOAuth({
@@ -29,13 +30,21 @@ export const Header = ({ onLogin }: HeaderProps) => {
       });
 
       if (error) {
+        console.error('Login error:', error); // Debug log
         toast({
           title: "Login Error",
           description: error.message,
           variant: "destructive",
         });
+        return;
+      }
+
+      // If we have data but no error, log success
+      if (data) {
+        console.log('Login successful:', data); // Debug log
       }
     } catch (error) {
+      console.error('Unexpected error during login:', error); // Debug log
       toast({
         title: "Login Error",
         description: "An unexpected error occurred. Please try again.",

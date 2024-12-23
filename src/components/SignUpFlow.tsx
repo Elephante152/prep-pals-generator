@@ -24,8 +24,10 @@ export const SignUpFlow = () => {
   const handleGoogleSignIn = async () => {
     try {
       setIsLoading(true);
-      const redirectUrl = `${window.location.origin}/auth/callback`;
-      console.log('Redirect URL:', redirectUrl);
+      // Get the current domain without trailing slash
+      const baseUrl = window.location.origin.replace(/\/$/, '');
+      const redirectUrl = `${baseUrl}/auth/callback`;
+      console.log('Redirect URL:', redirectUrl); // Debug log
 
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
@@ -39,15 +41,21 @@ export const SignUpFlow = () => {
       });
 
       if (error) {
-        console.error('Google Sign In Error:', error);
+        console.error('Google Sign In Error:', error); // Debug log
         toast({
           title: "Authentication Error",
           description: error.message,
           variant: "destructive",
         });
+        return;
+      }
+
+      // If we have data but no error, log success
+      if (data) {
+        console.log('Sign in successful:', data); // Debug log
       }
     } catch (error) {
-      console.error('Unexpected Error:', error);
+      console.error('Unexpected Error:', error); // Debug log
       toast({
         title: "Authentication Error",
         description: "An unexpected error occurred. Please try again.",
